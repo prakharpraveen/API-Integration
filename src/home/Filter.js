@@ -5,7 +5,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
-
 const styles = theme => ({
     
     formControl: {
@@ -14,40 +13,29 @@ const styles = theme => ({
     },
    
 });
-class componentName extends Component {
-    state = {
-        age: '',
-        name: 'hai',
-        labelWidth: 0,
-      };
-
-      handleChange = event => {
-        this.setState({ [event.target.name]: event.target.value });
-      };
+class Filter extends Component {
+  
     render() {
-        const { classes } = this.props;
-        const { age } = this.state;
+        const { classes, handleItemsPerPage, per_page } = this.props;
         return (
             <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="age-simple">Items</InputLabel>
+                <InputLabel htmlFor="items_per_page-simple">Items</InputLabel>
                 <Select
-                    value={age}
-                    onChange={this.handleChange}
+                    value={per_page}
+                    onChange={(e) => handleItemsPerPage(e)}
                     inputProps={{
-                        name: 'age',
-                        id: 'age-simple',
+                        name: 'items_per_page',
+                        id: 'items_per_page-simple',
                     }}
                 >
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
+                    <MenuItem value={3}>3</MenuItem>
+                    <MenuItem value={5}>5</MenuItem>
+                    <MenuItem value={10}>10</MenuItem>
+                    <MenuItem value={50}>50</MenuItem>
                 </Select>
             </FormControl>
         )
     }
 }
 
-export default withStyles(styles)(componentName);
+export default withStyles(styles)(Filter);

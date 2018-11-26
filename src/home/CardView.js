@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -8,6 +7,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import UpdateUser from './UpdateUser';
+import DeleteUser from './DeleteUser';
 
 const styles = {
   card: {
@@ -18,13 +19,36 @@ const styles = {
   },
 };
 
-function MediaCard(props) {
-  const { classes, user={} } = props;
-  console.log("user))))))))))))))00");
-  console.log(user);
+class CardView extends Component {
+
+  state = {
+    isUpdate: false,
+    isDelete: false
+  };
+
+  openUpdate = () => {
+    this.setState({isUpdate: true});
+  }
+
+  closeUpdate = () => {
+    this.setState({isUpdate: false});
+  }
+
+  openDelete = () => {
+    this.setState({isDelete: true});
+  }
+
+  closeDelete = () => {
+    this.setState({isDelete: false});
+  }
+  render() {
+    const { classes, user={} } = this.props;
+    const { isUpdate, isDelete } = this.state;
   
   return (
     <Card className={classes.card}>
+    <UpdateUser isUpdate={isUpdate} user={user} closeUpdate={this.closeUpdate} />
+    <DeleteUser isDelete={isDelete} user={user} closeDelete={this.closeDelete} />
       <CardActionArea>
         <CardMedia
           className={classes.media}
@@ -38,19 +62,16 @@ function MediaCard(props) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" onClick={this.openUpdate}>
           Update
         </Button>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" onClick={this.openDelete}>
           Delete
         </Button>
       </CardActions>
     </Card>
   );
 }
+}
 
-MediaCard.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(MediaCard);
+export default withStyles(styles)(CardView);

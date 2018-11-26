@@ -4,47 +4,69 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-  import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { connect } from "react-redux";
 import { withStyles } from '@material-ui/core/styles';
-import {loginAction} from './../actions/userAction'
+import { loginAction } from './../actions/userAction';
+import { DotLoader } from 'react-spinners';
 
 
 const styles = {};
 
 class Login extends React.Component {
   state = {
-    open: false,
+    isBusy: false,
     email: '',
     password: '',
-    isInvalid: false
+    validEmail: false,
+    validPassword: false
   };
 
   onEmailChange = (e) => {
-    this.setState({email: e.target.value})
+    this.setState({ validEmail: false, email: e.target.value })
   }
 
   onPasswordChange = (e) => {
-    this.setState({password: e.target.value})
+    this.setState({ validPassword: false, password: e.target.value })
   }
 
   onLogin = () => {
-    const { loginAction } = this.props;
-    const { email, password } = this.state;
+    this.setState({ validEmail: false, validPassword: false });
 
+    const { loginAction, closeLogin } = this.props;
+    const { email, password } = this.state;
     const regEx = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    if (regEx.test(email)) {
-        this.setState({isInvalid: true}, () => {return});
+
+    if (!regEx.test(email)) {
+      this.setState({ validEmail: true });
+      return
     }
 
-    loginAction({email, password});
-      
+    if (password.length < 7) {
+      this.setState({ validPassword: true });
+      return
+    }
+    this.setState({ isBusy: true });
+    loginAction({ email, password }, () => this.closeLogin());
+
   }
 
+  closeLogin = () => {
+    const { closeLogin } = this.props;
+    this.setState({
+      isBusy: false,
+      email: '',
+      password: '',
+      validEmail: false,
+      validPassword: false
+    }, () => closeLogin());
+  }
+
+
   render() {
-    const { classes, isLogin, closeLogin } = this.props;
-    const { email, password, isInvalid } = this.state;
+    const { isLogin } = this.props;
+    const { email, password, validEmail, validPassword, isBusy } = this.state;
 
     return (
       <div>
@@ -56,6 +78,7 @@ class Login extends React.Component {
           <DialogTitle id="form-dialog-title">Login</DialogTitle>
           <DialogContent>
             <TextField
+              error={validEmail}
               autoFocus
               margin="dense"
               value={email}
@@ -66,7 +89,7 @@ class Login extends React.Component {
               fullWidth
             />
             <TextField
-              autoFocus
+              error={validPassword}
               margin="dense"
               value={password}
               onChange={this.onPasswordChange}
@@ -77,11 +100,19 @@ class Login extends React.Component {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => closeLogin()} color="primary">
+            {isBusy &&
+              <DotLoader
+                sizeUnit={"px"}
+                size={33}
+                color={'red'}
+                loading={true}
+              />
+            }
+            <Button onClick={this.closeLogin} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.onLogin} color="primary">
-                Login
+            <Button disabled={isBusy} onClick={this.onLogin} color="primary">
+              Login
             </Button>
           </DialogActions>
         </Dialog>
@@ -91,7 +122,7 @@ class Login extends React.Component {
 }
 
 const mapStateToProps = state => ({});
-  
+
 export default withStyles(styles)(
-    connect(mapStateToProps, {loginAction})(Login)
+  connect(mapStateToProps, { loginAction })(Login)
 );

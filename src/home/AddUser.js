@@ -1,161 +1,149 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Slide from '@material-ui/core/Slide';
-import Grid from '@material-ui/core/Grid';
-import AccountIcon from '@material-ui/icons/PersonPin';
-import CloseIcon from '@material-ui/icons/Close';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 import { connect } from "react-redux";
 import { withStyles } from '@material-ui/core/styles';
+import {addUserAction} from './../actions/userAction';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import { DotLoader } from 'react-spinners';
 
-
-
-
-function Transition(props) {
-    return <Slide direction="up" {...props} />;
-}
 
 const styles = {};
 
 class AddUser extends React.Component {
-    state = {
-        open: false,
-        seletedPeople: {},
-        name: '',
-        _id: '',
-        Description: '',
-    };
+  state = {
+    open: false,
+    first_name: '',
+    last_name: '',
+    isInvalid: false,
+    id:'',
+    avatar: '',
+    isBusy: false
+  };
 
-    handleClickOpen = () => {
-        this.setState({ open: true });
-    };
+  onFirstNameChange = (e) => {
+    this.setState({first_name: e.target.value, isInvalid: false})
+  }
 
-    handleClose = () => {
-        this.setState({ open: false });
-    };
+  onLastNameChange = (e) => {
+    this.setState({last_name: e.target.value, isInvalid: false})
+  }
 
-    setInput = (e, key) => {
-        this.setState({ [key]: e.target.value });
+  onAvatarChange = (e) => {
+    this.setState({avatar: e.target.value, isInvalid: false})
+  }
+
+  onAddUser = () => {
+    const { addUserAction } = this.props;
+    const { first_name, last_name, avatar, id } = this.state;
+
+    if (first_name.length < 1 || last_name.length < 1 || avatar.length < 1) {
+      this.setState({isInvalid: true});
     }
-    onAdd = () => {
-        const { onAdd, addHandlar } = this.props;
-        const { name, _id, Description } = this.state;
-        if (_id.length > 0) {
-            onAdd({ name, _id, Description });
-            this.setState({
-                name: '',
-                _id: '',
-                Description: '',
-            }, () => addHandlar(false));
-        }
-        else{
+    this.setState({isBusy: true});
+    addUserAction({first_name, last_name, avatar, id }, () => this.close());
+    ;
+  }
+
+  close = () => {
+    const { closeAddUser } = this.props;
+
+    this.setState({
+      open: false,
+      first_name: '',
+      last_name: '',
+      isInvalid: false,
+      id:'',
+      avatar: '',
+      isBusy: false
+    });
+    closeAddUser();
+  }
+
+  render() {
+    const { isAddUser } = this.props;
+    const { first_name, last_name, avatar, isInvalid, isBusy } = this.state;
+
+    return (
+      <div>
+        <Dialog
+          open={isAddUser}
+          aria-labelledby="form-dialog-title"
+          maxWidth={"md"}
+        >
+          <DialogTitle id="form-dialog-title">Add User</DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              value={first_name}
+              onChange={this.onFirstNameChange}
+              label="First Name*"
+              type="text"
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              value={last_name}
+              onChange={this.onLastNameChange}
+              label="Last Name*"
+              type="text"
+              fullWidth
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              value={avatar}
+              onChange={this.onAvatarChange}
+              label="avatar*"
+              type="text"
+              fullWidth
+            />
             
-        this.setState({errorMsg: "_Id is required"})
-        }
-    }
+          {isInvalid &&
+              <DialogContentText>
+              <span style={{color: "red"}}>
+                All fields are required
+                <sup>
+                  <strong>*</strong>
+                </sup>
+              </span>
 
-    render() {
-        const { isOpen, addHandlar, onAdd } = this.props;
-        const { name, _id, Description } = this.state;
-        return (
-            <div>
-                <Dialog
-                    open={isOpen}
-                    TransitionComponent={Transition}
-                    aria-labelledby="alert-dialog-slide-title"
-                    aria-describedby="alert-dialog-slide-Description"
-                >
-                    <DialogTitle id="alert-dialog-slide-title">
-                        <div style={{ display: "flex" }}>
-                            <div>
-                                <AccountIcon style={{ fontSize: 76 }} />
-                            </div>
-                            <div style={{ textAlign: "right", width: "100%", cursor: "pointer" }} onClick={() => addHandlar(false)}>
-                                <CloseIcon />
-                            </div>
-                        </div>
-                    </DialogTitle>
-                    <DialogContent>
-                        <Grid item xs={12}>
-                            <Grid container>
-                                <Grid item xs={1}></Grid>
-                                <Grid item xs={10}>
-                                    <Grid container spacing={40}>
-                                        <Grid item xs={5}>
-                                            <Typography variant="h4" gutterBottom>
-                                                Name
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={7} style={{ textAlign: "left" }}>
-                                            <TextField
-                                                style={{ fontSize: 29 }}
-                                                onChange={(e) => this.setInput(e, 'name')}
-                                                value={name}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={5}>
-                                            <Typography variant="h4" gutterBottom>
-                                                Id
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={7} style={{ textAlign: "left" }}>
-                                            <TextField
-                                                style={{ fontSize: 29 }}
-                                                onChange={(e) => this.setInput(e, '_id')}
-                                                value={_id}
-                                            />
-                                        </Grid>
+            </DialogContentText>
+            }
+          </DialogContent>
+          <DialogActions>
+            {isBusy &&
+              <DotLoader
+                  sizeUnit={"px"}
+                  size={33}
+                  color={'red'}
+                  loading={true}
+              />
+            }
+            <Button onClick={this.close} color="primary">
+              Cancel
+            </Button>
+            
+            <Button disabled={isBusy} onClick={this.onAddUser} color="primary">
+              Add User
+            </Button>
 
-                                        <Grid item xs={5}>
-                                            <Typography variant="h4" gutterBottom>
-                                                Description
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={7} style={{ textAlign: "left" }}>
-                                            {/* <TextField
-                                                fullWidth
-                                                /> */}
-                                            <TextField
-                                                style={{ fontSize: 29 }}
-                                                id="standard-multiline-static"
-                                                multiline
-                                                rows="4"
-                                                value={Description}
-                                                margin="normal"
-                                                onChange={(e) => this.setInput(e, 'Description')}
-                                            />
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                                <Grid item xs={1}></Grid>
-                            </Grid>
-                        </Grid>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => addHandlar(false)} color="primary">
-                            Cancel
-                        </Button>
-                        <Button onClick={this.onAdd} variant="contained" size="large" color="primary" style={{
-                            borderRadius: 91,
-                            fontSize: 14
-                        }}>
-                            Add User
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
-        );
-    }
+            
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  }
 }
 
-
 const mapStateToProps = state => ({});
-  
-  export default withStyles(styles)(
-    connect(mapStateToProps, {})(AddUser)
-  );
+
+export default withStyles(styles)(
+    connect(mapStateToProps, {addUserAction})(AddUser)
+);
