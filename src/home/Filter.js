@@ -14,7 +14,7 @@ const styles = theme => ({
 class Filter extends Component {
   
     render() {
-        const { classes, handleItemsPerPage, per_page } = this.props;
+        const { classes, handleItemsPerPage, per_page = 10 } = this.props;
         return (
             <FormControl className={classes.formControl}>
                 <InputLabel htmlFor="items_per_page-simple">Items</InputLabel>

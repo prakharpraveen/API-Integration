@@ -59,10 +59,10 @@ export const updateAction = (formData, closeCallBack) => (dispatch) => {
     .put("https://reqres.in/api/users/" + formData.id, { ...formData })
     .then(function (response) {
       console.log(response);
-      // dispatch({
-      //   type: "UPDATE_USER",
-      //   payload: response.data
-      // });
+      dispatch({
+        type: "UPDATE_USER",
+        payload: formData
+      });
       closeCallBack();
     })
     .catch(function (error) {
@@ -106,7 +106,7 @@ export const addUserAction = (formData, closeCallBack) => dispatch => {
       console.log(response);
       dispatch({
         type: "ADD_USER",
-        payload: response.data
+        payload: formData
       });
       closeCallBack();
     })

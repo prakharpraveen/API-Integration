@@ -61,7 +61,7 @@ class Register extends React.Component {
   }
 
   render() {
-    const { classes, isRegister, closeRegister } = this.props;
+    const { isRegister } = this.props;
     const { email, password, validEmail, validPassword } = this.state;
     return (
       <div>

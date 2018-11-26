@@ -33,7 +33,7 @@ class ListView extends Component {
         total: 0,
         total_pages: 1,
         users: [],
-        searchKey: ""
+        searchKey: "",
     }
 
     componentDidMount = () => this.fetchUser();
@@ -80,7 +80,7 @@ class ListView extends Component {
 
     render() {
         const { classes, isFetchingUser, userToken } = this.props;
-        const { users, per_page, page, total_pages, searchKey } = this.state;
+        const { users = [], per_page, page = 1, total_pages = 1, searchKey,  total = 0 } = this.state;
 
         return (
             <div className={classes.root}>
@@ -104,15 +104,15 @@ class ListView extends Component {
                                     </Grid>
 
                                     <Grid item md={6} style={{ textAlign: "right" }}>
-                                        <Button color="primary" className={classes.button} disabled={page === 1} onClick={this.previous} variant="outlined" size="small">
-                                            Previous
-                                    </Button>
+                                        <Button color="primary"  className={classes.button} disabled={page === 1} onClick={this.previous} variant="outlined" size="small">
+                                                Previous
+                                        </Button>
                                         <Button>
-                                            page number : {page} of {total_pages}
+                                            page number : {page} of {total_pages} , total: {total }
                                         </Button>
                                         <Button color="primary" className={classes.button} disabled={total_pages === page} onClick={this.next} variant="outlined" size="small">
                                             next
-                                    </Button>
+                                        </Button>
                                     </Grid>
                                 </Grid>
                             </Paper>

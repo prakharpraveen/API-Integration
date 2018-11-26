@@ -9,6 +9,8 @@ import { connect } from "react-redux";
 import { withStyles } from '@material-ui/core/styles';
 import { loginAction } from './../actions/userAction';
 import { DotLoader } from 'react-spinners';
+import DialogContentText from '@material-ui/core/DialogContentText';
+
 
 const styles = {};
 
@@ -42,7 +44,7 @@ class Login extends React.Component {
     const { email, password, name } = this.state;
     const regEx = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    if (name.length < 1 ) {
+    if (name.length < 1) {
       this.setState({ validName: true });
       return
     }
@@ -86,13 +88,13 @@ class Login extends React.Component {
         >
           <DialogTitle id="form-dialog-title">Login</DialogTitle>
           <DialogContent>
-          <TextField
+            <TextField
               error={validName}
               autoFocus
               margin="dense"
               value={name}
               onChange={this.onNameChange}
-              label="User Name"
+              label="User Name*"
               type="text"
               fullWidth
             />
@@ -101,7 +103,7 @@ class Login extends React.Component {
               margin="dense"
               value={email}
               onChange={this.onEmailChange}
-              label="Email Address"
+              label="Email Addres*"
               type="email"
               fullWidth
             />
@@ -110,10 +112,21 @@ class Login extends React.Component {
               margin="dense"
               value={password}
               onChange={this.onPasswordChange}
-              label="Password"
+              label="Password*"
               type="password"
               fullWidth
             />
+            {validPassword &&
+              <DialogContentText>
+                <span style={{ color: "red" }}>
+                  password should be at least 7 characters in length
+                  <sup>
+                    <strong>*</strong>
+                  </sup>
+                </span>
+
+              </DialogContentText>
+            }
           </DialogContent>
           <DialogActions>
             {isBusy &&

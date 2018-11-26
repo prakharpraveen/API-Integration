@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { connect } from "react-redux";
 import { withStyles } from '@material-ui/core/styles';
-import {updateAction} from './../actions/userAction'
+import { updateAction } from './../actions/userAction'
 import DialogContentText from '@material-ui/core/DialogContentText';
 import { DotLoader } from 'react-spinners';
 
@@ -19,31 +19,32 @@ class UpdateUser extends React.Component {
     first_name: '',
     last_name: '',
     isInvalid: false,
-    id:'',
+    id: '',
     avatar: '',
     isBusy: false
   };
 
-  componentWillReceiveProps(nextProps){
-    const { first_name, last_name, id, avatar  } = nextProps.user;
-    this.setState({first_name, last_name, id, avatar});
+  componentWillReceiveProps(nextProps) {
+    const { first_name, last_name, id, avatar } = nextProps.user;
+    this.setState({ first_name, last_name, id, avatar });
   }
 
-  onFirstNameChange = (e) => this.setState({first_name: e.target.value});
-  onLastNameChange = (e) => this.setState({last_name: e.target.value});
+  onFirstNameChange = (e) => this.setState({ first_name: e.target.value });
 
-  onAvatarChange = (e) => this.setState({avatar: e.target.value});
+  onLastNameChange = (e) => this.setState({ last_name: e.target.value });
+
+  onAvatarChange = (e) => this.setState({ avatar: e.target.value });
 
   onUpdate = () => {
     const { updateAction } = this.props;
     const { first_name, last_name, avatar, id } = this.state;
 
     if (first_name.length < 1 || last_name.length < 1 || avatar.length < 1) {
-      this.setState({isInvalid: true});
+      this.setState({ isInvalid: true });
       return;
     }
-    this.setState({isBusy: true});
-    updateAction({first_name, last_name, avatar, id }, () => this.close());
+    this.setState({ isBusy: true });
+    updateAction({ first_name, last_name, avatar, id }, () => this.close());
   }
 
   close = () => {
@@ -54,7 +55,7 @@ class UpdateUser extends React.Component {
       first_name: '',
       last_name: '',
       isInvalid: false,
-      id:'',
+      id: '',
       avatar: '',
       isBusy: false
     });
@@ -102,8 +103,8 @@ class UpdateUser extends React.Component {
               fullWidth
             />
             {isInvalid &&
-                <DialogContentText>
-                <span style={{color: "red"}}>
+              <DialogContentText>
+                <span style={{ color: "red" }}>
                   All fields are required
                   <sup>
                     <strong>*</strong>
@@ -113,13 +114,13 @@ class UpdateUser extends React.Component {
             }
           </DialogContent>
           <DialogActions>
-            {isBusy && 
-             <DotLoader
-              sizeUnit={"px"}
-              size={33}
-              color={'red'}
-              loading={true}
-             />
+            {isBusy &&
+              <DotLoader
+                sizeUnit={"px"}
+                size={33}
+                color={'red'}
+                loading={true}
+              />
             }
             <Button onClick={this.close} color="primary">
               Cancel
@@ -135,7 +136,7 @@ class UpdateUser extends React.Component {
 }
 
 const mapStateToProps = state => ({});
-  
+
 export default withStyles(styles)(
-    connect(mapStateToProps, {updateAction})(UpdateUser)
+  connect(mapStateToProps, { updateAction })(UpdateUser)
 );

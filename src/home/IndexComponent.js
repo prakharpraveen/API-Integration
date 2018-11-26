@@ -9,7 +9,7 @@ import Register from './Register';
 import Login from './Login';
 import ListView from './ListView';
 import AddUser from './AddUser';
-import { logoutAction, loginAction } from './../actions/userAction';
+import { logoutAction } from './../actions/userAction';
 import Avatar from '@material-ui/core/Avatar';
 import FaceIcon from '@material-ui/icons/Face';
 import Chip from '@material-ui/core/Chip';
@@ -76,7 +76,7 @@ class IndexComponent extends Component {
         <AddUser isAddUser={isAddUser} closeAddUser={this.closeAddUser} />
         <AppBar position="static">
           <Toolbar>
-            <Button color="inherit" onClick={this.openAddUser}>Add user</Button>
+            <Button color="inherit" disabled={userToken.length < 1} onClick={this.openAddUser}>Add user</Button>
             <Typography variant="h6" color="inherit" className={classes.grow}>
               React Redux App
             </Typography>
@@ -87,7 +87,7 @@ class IndexComponent extends Component {
 
               </div>
             }
-            {userToken.length != 0 &&
+            {userToken.length !== 0 &&
               <div style={{ display: "flex" }}>
                 <Button color="inherit" onClick={this.logout}>Logout</Button>
                 <Chip
