@@ -9,9 +9,10 @@ import Register from './Register';
 import Login from './Login';
 import ListView from './ListView';
 import AddUser from './AddUser';
-import { logoutAction } from './../actions/userAction';
+import { logoutAction, loginAction } from './../actions/userAction';
 import Avatar from '@material-ui/core/Avatar';
 import FaceIcon from '@material-ui/icons/Face';
+import Chip from '@material-ui/core/Chip';
 
 
 const styles = {
@@ -64,9 +65,8 @@ class IndexComponent extends Component {
   }
 
   render() {
-    const { classes, userToken, isFetchingUser } = this.props;
+    const { classes, userToken, logInUserName } = this.props;
     const { isRegister, isLogin, isAddUser } = this.state;
-    console.log({ isFetchingUser });
 
     return (
       <div className={classes.root}>
@@ -78,7 +78,7 @@ class IndexComponent extends Component {
           <Toolbar>
             <Button color="inherit" onClick={this.openAddUser}>Add user</Button>
             <Typography variant="h6" color="inherit" className={classes.grow}>
-              Minkspay
+              React Redux App
             </Typography>
             {userToken.length === 0 &&
               <div>
@@ -88,12 +88,19 @@ class IndexComponent extends Component {
               </div>
             }
             {userToken.length != 0 &&
-              <div style={{display: "flex"}}>
+              <div style={{ display: "flex" }}>
                 <Button color="inherit" onClick={this.logout}>Logout</Button>
-                <Avatar>
-                  <FaceIcon />
-                </Avatar>
-
+                <Chip
+                  avatar={
+                    <Avatar>
+                      <FaceIcon />
+                    </Avatar>
+                  }
+                  style={{backgroundColor: "#e9ffff"}}
+                  label={logInUserName}
+                  className={classes.chip}
+                  variant="outlined"
+                />
               </div>
             }
           </Toolbar>
@@ -105,7 +112,10 @@ class IndexComponent extends Component {
 }
 
 
-const mapStateToProps = state => ({userToken: state.userReducer.userToken});
+const mapStateToProps = state => ({
+  userToken: state.userReducer.userToken,
+  logInUserName: state.userReducer.logInUserName
+});
 
 export default withStyles(styles)(
   connect(mapStateToProps, { logoutAction })(IndexComponent)

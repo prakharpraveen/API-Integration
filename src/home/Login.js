@@ -17,8 +17,11 @@ class Login extends React.Component {
     isBusy: false,
     email: '',
     password: '',
+    validName: false,
     validEmail: false,
-    validPassword: false
+    validPassword: false,
+    name: ''
+
   };
 
   onEmailChange = (e) => {
@@ -29,12 +32,20 @@ class Login extends React.Component {
     this.setState({ validPassword: false, password: e.target.value })
   }
 
+  onNameChange = (e) => {
+    this.setState({ validName: false, name: e.target.value })
+  }
   onLogin = () => {
     this.setState({ validEmail: false, validPassword: false });
 
-    const { loginAction, closeLogin } = this.props;
-    const { email, password } = this.state;
+    const { loginAction } = this.props;
+    const { email, password, name } = this.state;
     const regEx = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (name.length < 1 ) {
+      this.setState({ validName: true });
+      return
+    }
 
     if (!regEx.test(email)) {
       this.setState({ validEmail: true });
@@ -46,7 +57,7 @@ class Login extends React.Component {
       return
     }
     this.setState({ isBusy: true });
-    loginAction({ email, password }, () => this.closeLogin());
+    loginAction({ email, password, name }, () => this.closeLogin());
 
   }
 
@@ -64,7 +75,7 @@ class Login extends React.Component {
 
   render() {
     const { isLogin } = this.props;
-    const { email, password, validEmail, validPassword, isBusy } = this.state;
+    const { email, password, validName, validEmail, validPassword, isBusy, name } = this.state;
 
     return (
       <div>
@@ -75,13 +86,21 @@ class Login extends React.Component {
         >
           <DialogTitle id="form-dialog-title">Login</DialogTitle>
           <DialogContent>
+          <TextField
+              error={validName}
+              autoFocus
+              margin="dense"
+              value={name}
+              onChange={this.onNameChange}
+              label="User Name"
+              type="text"
+              fullWidth
+            />
             <TextField
               error={validEmail}
-              autoFocus
               margin="dense"
               value={email}
               onChange={this.onEmailChange}
-              id="name"
               label="Email Address"
               type="email"
               fullWidth
@@ -91,7 +110,6 @@ class Login extends React.Component {
               margin="dense"
               value={password}
               onChange={this.onPasswordChange}
-              id="name"
               label="Password"
               type="password"
               fullWidth

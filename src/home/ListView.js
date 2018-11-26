@@ -3,11 +3,12 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import CardView from './CardView';
-import { fetchUsersAction } from './../actions/userAction';
+import { fetchUsersAction, searchAction } from './../actions/userAction';
 import { connect } from "react-redux";
 import Filter from './Filter';
 import Button from '@material-ui/core/Button';
 import { DotLoader } from 'react-spinners';
+import TextField from '@material-ui/core/TextField';
 
 const styles = theme => ({
     root: {
@@ -32,6 +33,7 @@ class ListView extends Component {
         total: 0,
         total_pages: 1,
         users: [],
+        searchKey: ""
     }
 
     componentDidMount = () => this.fetchUser();
@@ -71,16 +73,18 @@ class ListView extends Component {
         this.setState({ page: page - 1 }, () => this.fetchUser());
     }
 
+    search = (e) => {
+        const { searchAction } = this.props;
+        this.setState({ searchKey: e.target.value }, () => searchAction(this.state.searchKey))
+    };
+
     render() {
-        const { classes, isFetchingUser } = this.props;
-        const { users, per_page, page, total_pages } = this.state;
+        const { classes, isFetchingUser, userToken } = this.props;
+        const { users, per_page, page, total_pages, searchKey } = this.state;
 
         return (
             <div className={classes.root}>
-
-
                 {
-
                     <Grid container spacing={24}>
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>
@@ -89,7 +93,17 @@ class ListView extends Component {
                                         <Filter handleItemsPerPage={this.handleItemsPerPage} per_page={per_page} />
                                     </Grid>
 
-                                    <Grid item md={9} style={{ textAlign: "right" }}>
+                                    <Grid item md={3} style={{ textAlign: "left" }}>
+                                        <TextField
+                                            label="Search User"
+                                            className={classes.textField}
+                                            value={searchKey}
+                                            onChange={this.search}
+                                        // margin="normal"
+                                        />
+                                    </Grid>
+
+                                    <Grid item md={6} style={{ textAlign: "right" }}>
                                         <Button color="primary" className={classes.button} disabled={page === 1} onClick={this.previous} variant="outlined" size="small">
                                             Previous
                                     </Button>
@@ -105,25 +119,33 @@ class ListView extends Component {
                         </Grid>
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>
-                                <Grid container spacing={24} justify="center" >
-                                    {!isFetchingUser &&
-                                        users.map((user, i) => (
-                                            <Grid item md={3} key={i}>
-                                                <Paper className={classes.paper} >
-                                                    <CardView user={user} />
-                                                </Paper>
-                                            </Grid>
-                                        ))
-                                    }
-                                    {isFetchingUser &&
-                                        <DotLoader
-                                            sizeUnit={"px"}
-                                            size={500}
-                                            color={'red'}
-                                            loading={true}
-                                        />
-                                    }
-                                </Grid>
+                                {userToken.length < 1 &&
+                                    <div><b>Please Login</b></div>
+                                }
+                                {userToken.length > 1 &&
+
+                                    <Grid container spacing={24} justify="center" >
+                                        {!isFetchingUser &&
+                                            users.map((user, i) => (
+                                                <Grid item md={3} key={i}>
+                                                    <Paper className={classes.paper} >
+                                                        <CardView user={user} />
+
+
+                                                    </Paper>
+                                                </Grid>
+                                            ))
+                                        }
+                                        {isFetchingUser &&
+                                            <DotLoader
+                                                sizeUnit={"px"}
+                                                size={500}
+                                                color={'red'}
+                                                loading={true}
+                                            />
+                                        }
+                                    </Grid>
+                                }
                             </Paper>
                         </Grid>
                     </Grid>
@@ -136,10 +158,11 @@ class ListView extends Component {
 const mapStateToProps = state => {
     return {
         users: state.userReducer,
-        isFetchingUser: state.userReducer.isFetchingUser
+        isFetchingUser: state.userReducer.isFetchingUser,
+        userToken: state.userReducer.userToken
     }
 };
 
 export default withStyles(styles)(
-    connect(mapStateToProps, { fetchUsersAction })(ListView)
+    connect(mapStateToProps, { fetchUsersAction, searchAction })(ListView)
 );

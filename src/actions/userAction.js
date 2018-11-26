@@ -24,7 +24,8 @@ export const loginAction = (formData, closeCallBack) => dispatch => {
     .then(function (response) {
       dispatch({
         type: "LOGIN_USER",
-        payload: response.data.token
+        payload: response.data.token,
+        logInUserName: formData.name
       });
       closeCallBack();
     })
@@ -114,3 +115,12 @@ export const addUserAction = (formData, closeCallBack) => dispatch => {
       closeCallBack();
     });
 };
+
+
+export const searchAction = (searchKey) => (dispatch) => {
+  //search api is not available
+  dispatch({
+    type: "SEARCH_KEY",
+    payload: searchKey
+  });
+}
