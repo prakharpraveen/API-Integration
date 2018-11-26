@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -14,7 +14,7 @@ import { DotLoader } from 'react-spinners';
 
 const styles = {};
 
-class AddUser extends React.Component {
+class AddUser extends  Component {
   state = {
     open: false,
     first_name: '',
@@ -43,6 +43,7 @@ class AddUser extends React.Component {
 
     if (first_name.length < 1 || last_name.length < 1 || avatar.length < 1) {
       this.setState({isInvalid: true});
+      return;
     }
     this.setState({isBusy: true});
     addUserAction({first_name, last_name, avatar, id }, () => this.close());
@@ -105,16 +106,16 @@ class AddUser extends React.Component {
               fullWidth
             />
             
-          {isInvalid &&
-              <DialogContentText>
-              <span style={{color: "red"}}>
-                All fields are required
-                <sup>
-                  <strong>*</strong>
-                </sup>
-              </span>
+            {isInvalid &&
+                <DialogContentText>
+                <span style={{color: "red"}}>
+                  All fields are required
+                  <sup>
+                    <strong>*</strong>
+                  </sup>
+                </span>
 
-            </DialogContentText>
+              </DialogContentText>
             }
           </DialogContent>
           <DialogActions>

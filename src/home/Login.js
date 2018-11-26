@@ -10,7 +10,6 @@ import { withStyles } from '@material-ui/core/styles';
 import { loginAction } from './../actions/userAction';
 import { DotLoader } from 'react-spinners';
 
-
 const styles = {};
 
 class Login extends React.Component {
@@ -36,7 +35,6 @@ class Login extends React.Component {
     const { loginAction, closeLogin } = this.props;
     const { email, password } = this.state;
     const regEx = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
 
     if (!regEx.test(email)) {
       this.setState({ validEmail: true });

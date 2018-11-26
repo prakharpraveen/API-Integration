@@ -7,7 +7,7 @@ import { fetchUsersAction } from './../actions/userAction';
 import { connect } from "react-redux";
 import Filter from './Filter';
 import Button from '@material-ui/core/Button';
-import { ClipLoader } from 'react-spinners';
+import { DotLoader } from 'react-spinners';
 
 const styles = theme => ({
     root: {
@@ -34,10 +34,7 @@ class ListView extends Component {
         users: [],
     }
 
-    componentDidMount() {
-        const { per_page, page } = this.state;
-        this.fetchUser();
-    }
+    componentDidMount = () => this.fetchUser();
 
     fetchUser = () => {
         const { fetchUsersAction } = this.props;
@@ -88,7 +85,7 @@ class ListView extends Component {
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>
                                 <Grid container >
-                                    <Grid item md={3}>
+                                    <Grid item md={3} style={{ textAlign: "left" }}>
                                         <Filter handleItemsPerPage={this.handleItemsPerPage} per_page={per_page} />
                                     </Grid>
 
@@ -119,9 +116,9 @@ class ListView extends Component {
                                         ))
                                     }
                                     {isFetchingUser &&
-                                        <ClipLoader
+                                        <DotLoader
                                             sizeUnit={"px"}
-                                            size={440}
+                                            size={500}
                                             color={'red'}
                                             loading={true}
                                         />

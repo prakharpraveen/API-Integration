@@ -53,19 +53,16 @@ export const fetchUsersAction = (urlSlug = '') => (dispatch) => {
     });
 };
 
-export const updateAction = (formData) => (dispatch) => {
+export const updateAction = (formData, closeCallBack) => (dispatch) => {
   axios
     .put("https://reqres.in/api/users/" + formData.id, { ...formData })
     .then(function (response) {
-      console.log("response");
       console.log(response);
-      
-      if (response.data) {
-        // dispatch({
-        //   type: "DELETE_USER",
-        //   payload: id
-        // });
-      }
+      // dispatch({
+      //   type: "UPDATE_USER",
+      //   payload: response.data
+      // });
+      closeCallBack();
     })
     .catch(function (error) {
       console.log(error);
@@ -106,7 +103,6 @@ export const addUserAction = (formData, closeCallBack) => dispatch => {
     })
     .then(function (response) {
       console.log(response);
-      
       dispatch({
         type: "ADD_USER",
         payload: response.data

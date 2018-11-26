@@ -6,12 +6,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
 const styles = theme => ({
-    
     formControl: {
       margin: theme.spacing.unit,
       minWidth: 120,
     },
-   
 });
 class Filter extends Component {
   

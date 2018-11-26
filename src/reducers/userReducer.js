@@ -10,10 +10,14 @@ export default function (state = { users: [], userToken:'', isFetchingUser: true
             return { ...state, users: action.payload, isFetchingUser: false }
 
         case "DELETE_USER":
-            return { ...state, users: state.users.filter(user => !action.payload.includes(user._id) ) }
+            return { ...state, 
+                // users: state.users.filter(user => !action.payload.includes(user.id) )
+             }
 
         case "ADD_USER":
-            return { ...state, users: [...state.users, action.payload] }
+            return { ...state,
+                //  users: [...state.users, action.payload]
+                 }
         default:
             return state;
     }

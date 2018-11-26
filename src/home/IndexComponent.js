@@ -11,9 +11,7 @@ import ListView from './ListView';
 import AddUser from './AddUser';
 import { logoutAction } from './../actions/userAction';
 import Avatar from '@material-ui/core/Avatar';
-import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
-import DoneIcon from '@material-ui/icons/Done';
 
 
 const styles = {
@@ -107,14 +105,7 @@ class IndexComponent extends Component {
 }
 
 
-const mapStateToProps = state => {
-  console.log(state);
-
-  return {
-    userToken: state.userReducer.userToken,
-
-  }
-};
+const mapStateToProps = state => ({userToken: state.userReducer.userToken});
 
 export default withStyles(styles)(
   connect(mapStateToProps, { logoutAction })(IndexComponent)
