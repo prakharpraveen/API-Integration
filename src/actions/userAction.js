@@ -71,16 +71,16 @@ export const updateAction = (formData, closeCallBack) => (dispatch) => {
 };
 
 
-export const deleteUserAction = (_id) => (dispatch) => {
+export const deleteUserAction = (id, closeCallBack) => (dispatch) => {
   axios
-    .delete("https://reqres.in/api/users/" + _id, {})
+    .delete("https://reqres.in/api/users/" + id)
     .then(function (response) {
-      if (response.data) {
+        console.log(response);
         dispatch({
           type: "DELETE_USER",
-          payload: _id
+          payload: id
         });
-      }
+        closeCallBack();
     })
     .catch(function (error) {
       console.log(error);

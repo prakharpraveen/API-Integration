@@ -6,7 +6,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { connect } from "react-redux";
 import { withStyles } from '@material-ui/core/styles';
-import { deleteUserAction } from './../actions/userAction'
+import { deleteUserAction } from './../actions/userAction';
+import { DotLoader } from 'react-spinners';
+
 
 const styles = {};
 
@@ -14,6 +16,7 @@ class UpdateUser extends React.Component {
     state = {
         isInvalid: false,
         id: '',
+        isBusy: false
     };
 
 
@@ -24,12 +27,17 @@ class UpdateUser extends React.Component {
 
     onDelete = () => {
         const { deleteUserAction, closeDelete } = this.props;
-        deleteUserAction(this.state.id);
-        closeDelete()
+        this.setState({isBusy: true});
+        deleteUserAction(this.state.id, () => {
+            this.setState({isBusy: false});
+            closeDelete()
+        });
+
     }
 
     render() {
         const { isDelete, closeDelete } = this.props;
+        const { isBusy } = this.state;
         return (
             <div>
                 <Dialog
@@ -38,14 +46,22 @@ class UpdateUser extends React.Component {
                     maxWidth={"md"}
                 >
                     <DialogTitle id="form-dialog-title">Delete User</DialogTitle>
-                    <DialogContent style={{color:"red"}}>
+                    <DialogContent style={{ color: "red" }}>
                         Are You sure ?
                      </DialogContent>
                     <DialogActions>
                         <Button onClick={() => closeDelete()} color="primary">
                             Cancel
                         </Button>
-                        <Button onClick={this.onDelete} color="primary">
+                        {isBusy &&
+                            <DotLoader
+                                sizeUnit={"px"}
+                                size={33}
+                                color={'red'}
+                                loading={true}
+                            />
+                        }
+                        <Button disabled={isBusy} onClick={this.onDelete} color="primary">
                             Yes
                         </Button>
                     </DialogActions>

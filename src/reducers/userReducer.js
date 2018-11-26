@@ -12,7 +12,7 @@ export default function (state = { users: [], usersBackUp: [], userToken: '', is
         case "DELETE_USER":
             return {
                 ...state,
-                // users: state.users.filter(user => !action.payload.includes(user.id) )
+                users: {...state.users, data: state.users.data.filter(user => user.id !== action.payload)}
             }
         case "SEARCH_KEY":
             return {
