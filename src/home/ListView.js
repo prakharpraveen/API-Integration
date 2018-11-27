@@ -107,7 +107,7 @@ class ListView extends Component {
                                         <Button color="primary"  className={classes.button} disabled={page === 1} onClick={this.previous} variant="outlined" size="small">
                                                 Previous
                                         </Button>
-                                        <Button>
+                                        <Button style={{ cursor: 'auto' }}>
                                             page number : {page} of {total_pages} , total: {total }
                                         </Button>
                                         <Button color="primary" className={classes.button} disabled={total_pages === page} onClick={this.next} variant="outlined" size="small">

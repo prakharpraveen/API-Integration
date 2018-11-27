@@ -45,9 +45,7 @@ class Register extends React.Component {
       return
     }
 
-    registerAction({ email, password })
-    closeRegister();
-
+    registerAction({ email, password }, () => this.closeRegister())
   }
 
   closeRegister = () => {

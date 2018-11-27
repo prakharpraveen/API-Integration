@@ -66,6 +66,7 @@ class Login extends React.Component {
   closeLogin = () => {
     const { closeLogin } = this.props;
     this.setState({
+      name:'',
       isBusy: false,
       email: '',
       password: '',

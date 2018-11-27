@@ -36,7 +36,7 @@ export default function (state = { users: [], usersBackUp: [], userToken: '', is
                 ...state, users: {
                     ...state.usersBackUp, data: state.usersBackUp.data.filter(user => {
                         let str = user.first_name + " " + user.last_name;
-                        return str.toLowerCase().search(action.payload) === -1 ? false : true;
+                        return str.toLowerCase().search(action.payload.toLowerCase()) === -1 ? false : true;
                     })
                 }
             }

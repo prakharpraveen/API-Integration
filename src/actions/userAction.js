@@ -1,15 +1,12 @@
 import axios from "axios";
 
-export const registerAction = formData => dispatch => {
+export const registerAction = (formData, callback) => dispatch => {
   axios
     .post("https://reqres.in/api/register", {
       ...formData
     })
     .then(function (response) {
-      dispatch({
-        type: "LOGIN_USER",
-        payload: response.data.token
-      });
+      callback();
     })
     .catch(function (error) {
       console.log(error);
